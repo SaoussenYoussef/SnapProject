@@ -11,4 +11,5 @@
     <string name="snap_info_sample">10km</string>
     <string name="snap_image_content_description">snap_image</string>
     <string name="snap_action_comment_info_sample">35k</string>
+    <string name="m_away" />
 </resources>
