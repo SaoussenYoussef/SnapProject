@@ -2,6 +2,7 @@ package com.saoussen.snapanonyme.presentation.Infrastructure;
 
 import android.content.Context;
 
+import android.location.Location;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.Uri;
@@ -26,9 +27,9 @@ public class NetworkUtils {
     private static final String LOG_TAG = NetworkUtils.class.getSimpleName();
 
     // Base URL for snaps API.
-    private static final String SNAP_BASE_URL = "http://ec2-54-174-75-230.compute-1.amazonaws.com:9000?";
+    private static final String SNAP_BASE_URL = "http://ec2-54-174-75-230.compute-1.amazonaws.com:9000/snaps";
 
-
+// mes API écoutent snaps
 
     // Parameter for coordinate longitude.
     private static final String LONGITUDE = "longitude";
@@ -41,6 +42,11 @@ public class NetworkUtils {
     private Context mContext;
     private NetworkInfo networkInfo;
 
+
+
+    // Récuperer les données du réseau
+
+
     public NetworkUtils(Context context) {
         this.mContext = context;
         mConnectivityManager = (ConnectivityManager)
@@ -49,16 +55,16 @@ public class NetworkUtils {
 
 
 
-    public static List<Snap> getSnaps() {
+    public static List<Snap> getSnaps(Location location, Double scope) {
         //TODO Build the request and IMPLEMENT THIS
         List<Snap> snaps = new ArrayList<>();
         HttpURLConnection urlConnection = null;
         try {
 
             Uri builtUri = Uri.parse(SNAP_BASE_URL).buildUpon()
-                    .appendQueryParameter(LONGITUDE, String.valueOf(42.33335254))
-                    .appendQueryParameter(LATITUDE, String.valueOf(2.33333))
-                    .appendQueryParameter(DISTANCE, String.valueOf(30))
+                    .appendQueryParameter(LONGITUDE, String.valueOf(location.getLongitude()))
+                    .appendQueryParameter(LATITUDE, String.valueOf(location.getLatitude()))
+                    .appendQueryParameter(DISTANCE, String.valueOf(scope))
                     .build();
             URL requestUrl = new URL(builtUri.toString());
             urlConnection = (HttpURLConnection) requestUrl.openConnection();
@@ -67,6 +73,9 @@ public class NetworkUtils {
             InputStream inputStream = urlConnection.getInputStream();
 
             ObjectMapper mapper = new ObjectMapper();
+
+            // on converit le JASON en liste de String
+
 
             snaps = mapper.readValue(inputStream, new TypeReference<List<Snap>>() {
             });

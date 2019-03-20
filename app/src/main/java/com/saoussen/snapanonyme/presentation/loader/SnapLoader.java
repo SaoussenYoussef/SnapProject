@@ -1,35 +1,38 @@
 package com.saoussen.snapanonyme.presentation.loader;
 
 import android.content.Context;
-import android.graphics.Bitmap;
-import android.graphics.drawable.BitmapDrawable;
-import android.graphics.drawable.Drawable;
-import android.os.AsyncTask;
+import android.location.Location;
 import android.os.Build;
-import android.os.DropBoxManager;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.annotation.RequiresApi;
-import android.support.v4.content.AsyncTaskLoader;
-import android.util.Base64;
 
-import com.saoussen.snapanonyme.R;
+import com.saoussen.snapanonyme.presentation.Infrastructure.Network.AppUtils;
 import com.saoussen.snapanonyme.presentation.Infrastructure.NetworkUtils;
-import com.saoussen.snapanonyme.presentation.model.Picture;
+import com.saoussen.snapanonyme.presentation.model.SimpleLocation;
 import com.saoussen.snapanonyme.presentation.model.Snap;
 
-import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
 import java.util.List;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.annotation.RequiresApi;
+import androidx.loader.content.AsyncTaskLoader;
 
 
 public class SnapLoader extends AsyncTaskLoader<List<Snap>> {
 
-    Context mContext;
 
-    public SnapLoader(@NonNull Context context) {
+    Location mCurrentLocation;
+    Double mScope;
+
+
+    public SnapLoader(@NonNull Context context, Location mCurrentLocation, double mScope) {
         super(context);
+
+
+        this.mCurrentLocation = mCurrentLocation;
+        this.mScope = mScope;
     }
+
 
     @Override
     protected void onStartLoading() {
@@ -45,7 +48,26 @@ public class SnapLoader extends AsyncTaskLoader<List<Snap>> {
 
         // TODO request snaps from network
 
-        List<Snap> snaps = new ArrayList<>();
+        List<Snap> snaps = NetworkUtils.getSnaps(mCurrentLocation, mScope);
+
+        for (int i = 0; i < snaps.size(); i++) {
+            Snap snap = snaps.get(i);
+
+            SimpleLocation currentSimpleLocation = new SimpleLocation(mCurrentLocation.getLongitude(),
+                    mCurrentLocation.getLatitude());
+            SimpleLocation snapPostedAtSimpleLocation = snap.getPostedAt();
+
+            double distanceBetweenAsDouble = AppUtils.distanceBetweenAsMeters(currentSimpleLocation, snapPostedAtSimpleLocation, 0, 0);
+
+            snap.setDistance((int) distanceBetweenAsDouble);
+
+        }
+
+        return snaps;
+
+
+
+
 
        /* Snap snap = new Snap();
 
@@ -73,8 +95,6 @@ public class SnapLoader extends AsyncTaskLoader<List<Snap>> {
 
         }*/
 
-
-      return NetworkUtils.getSnaps();
 
     }
 }

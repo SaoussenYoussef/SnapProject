@@ -1,8 +1,7 @@
 package com.saoussen.snapanonyme.presentation.adapter;
 
 import android.content.Context;
-import android.support.annotation.NonNull;
-import android.support.v7.widget.RecyclerView;
+
 import android.util.Base64;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,6 +14,9 @@ import com.saoussen.snapanonyme.R;
 import com.saoussen.snapanonyme.presentation.model.Snap;
 
 import java.util.List;
+
+import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.RecyclerView;
 
 
 public class SnapsAdapter extends RecyclerView.Adapter<SnapsAdapter.SnapItemViewHolder> {
