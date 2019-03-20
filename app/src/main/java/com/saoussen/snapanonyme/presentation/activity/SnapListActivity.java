@@ -3,13 +3,17 @@ package com.saoussen.snapanonyme.presentation.activity;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
+import android.content.ClipData;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.RelativeLayout;
+import android.widget.Spinner;
 
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
@@ -45,6 +49,7 @@ public class SnapListActivity extends AppCompatActivity implements LoaderManager
     RecyclerView mRecyclerView;
     SnapsAdapter mAdapter;
     RelativeLayout mSpinner;
+    Spinner mScopeSpinner;
     private double mScope = 3000;
     private FusedLocationProviderClient mFusedLocationClient;
     private Location mCurrentLocation;
@@ -59,6 +64,9 @@ public class SnapListActivity extends AppCompatActivity implements LoaderManager
         setSupportActionBar(toolbar);
         mContext = this; // on l'initialise pas dans sa methode car c'est une implémentation d'nterface
         mSpinner = findViewById(R.id.spinner);
+
+        mScopeSpinner = findViewById(R.id.scope_spinner);
+
         mRecyclerView = findViewById(R.id.snap_list_recyclerview);
         mAdapter = new SnapsAdapter(mSnpas, this);
         mRecyclerView.setAdapter(mAdapter);
@@ -79,10 +87,23 @@ public class SnapListActivity extends AppCompatActivity implements LoaderManager
                         .setAction("Action", null).show();
             }
         });
+
+
+
+
+
     }
 
     private void initData() {
         mSpinner.setVisibility(View.VISIBLE);
+        mScopeSpinner.setVisibility(View.VISIBLE);
+
+
+
+        mScopeSpinner.setOnItemSelectedListener((AdapterView.OnItemSelectedListener) this);
+
+
+
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             String[] permissions = {Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION};
@@ -104,6 +125,26 @@ public class SnapListActivity extends AppCompatActivity implements LoaderManager
                 retrieveSnaps();
             }
         }
+    }
+
+    public void onDropDown(View view) {
+
+        Spinner spinner = (Spinner) findViewById(R.id.scope_spinner);
+
+        // Create an ArrayAdapter using the string array and a default spinner layout
+
+        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this,
+                R.array.scope_array, android.R.layout.simple_spinner_item);
+
+// Specify the layout to use when the list of choices appears
+
+        int simple_spinner_dropdown_item = android.R.layout.simple_spinner_dropdown_item;
+
+// Apply the adapter to the spinner
+
+        spinner.setAdapter(adapter);
+
+
     }
 
     @SuppressLint("MissingPermission")
@@ -168,6 +209,8 @@ public class SnapListActivity extends AppCompatActivity implements LoaderManager
     }
      *
     * */
+
+
 
 
     @Override

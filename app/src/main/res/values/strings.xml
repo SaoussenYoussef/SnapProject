@@ -11,5 +11,19 @@
     <string name="snap_info_sample">10km</string>
     <string name="snap_image_content_description">snap_image</string>
     <string name="snap_action_comment_info_sample">35k</string>
-    <string name="m_away" />
+    <string name="m_away">m_away</string>
+
+    <string-array name="scope_array">
+        <item>10</item>
+        <item>20</item>
+        <item>30</item>
+        <item>40</item>
+        <item>50</item>
+        <item>60</item>
+        <item>70</item>
+        <item>80</item>
+    </string-array>
+
+
+        />
 </resources>

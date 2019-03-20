@@ -13,16 +13,18 @@
         android:id="@+id/textView_app_title"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="@dimen/default_margin"
+        android:layout_alignParentTop="true"
+        android:layout_marginTop="80dp"
+        android:layout_marginBottom="@dimen/default_margin"
         android:gravity="center"
         android:text="@string/app_title"
         android:textAppearance="@style/TextAppearance.AppCompat.Large"
         android:textColor="@android:color/white"
-        android:textSize="70sp"
-        app:fontFamily="@font/alissya "
-        android:layout_alignParentTop="true"
 
-        />
+        android:textSize="70sp"
+        app:fontFamily="@font/alissya " />
+
+
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -31,6 +33,20 @@
         android:layout_marginBottom="@dimen/margin_24"
         android:orientation="vertical">
 
+        <Spinner
+            android:id="@+id/scope_spinner"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/fab_margin"
+            android:dropDownWidth="wrap_content"
+            android:entries="@color/colorAccent"
+            android:minWidth="@android:dimen/dialog_min_width_major"
+            android:spinnerMode="dropdown"
+            android:visibility="visible"
+            android:onClick="onDropDown"/>
+
+
+
         <Button
             android:id="@+id/imageButton_explore_main"
             android:layout_width="match_parent"
@@ -38,13 +54,13 @@
             android:layout_margin="16dp"
             android:background="@drawable/button_background"
             android:contentDescription="@string/explore_a_snap"
+            android:drawableLeft="@drawable/ic_share"
             android:onClick="onExploreSnaps"
             android:padding="@dimen/default_margin"
             android:text="EXPLORE"
             android:textAppearance="@style/TextAppearance.AppCompat.Widget.Switch"
             android:textColor="@android:color/white"
             android:textSize="30sp"
-            android:drawableLeft="@drawable/ic_share"
             app:fontFamily="@font/rocko"
 
             />

@@ -4,6 +4,8 @@ import android.content.Intent;
 import android.os.Bundle;
 
 import android.view.View;
+import android.widget.ArrayAdapter;
+import android.widget.Spinner;
 
 import com.saoussen.snapanonyme.R;
 
@@ -17,14 +19,12 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        //setContentView(R.layout.activity_main);
 
         //imageView = findViewById(R.id.main_background);
         // charger l'image avec GLide
         // Glide.with(this).load(R.drawable.astronomy_environment_evening).into(imageView);
-
-
     }
+
 
     public void onExploreSnaps(View view) {
 
@@ -36,5 +36,6 @@ public class MainActivity extends AppCompatActivity {
     public void onPublishSnap(View view) {
     }
 
+// TODO recreate DropDown Here ..
 
 }
