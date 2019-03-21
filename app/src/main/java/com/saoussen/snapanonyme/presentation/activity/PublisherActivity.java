@@ -1,11 +1,16 @@
 package com.saoussen.snapanonyme.presentation.activity;
 
+import android.Manifest;
 import android.annotation.SuppressLint;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
+import android.location.Location;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.MotionEvent;
@@ -13,23 +18,35 @@ import android.view.View;
 import android.view.MenuItem;
 import android.widget.ImageView;
 
+import androidx.core.app.ActivityCompat;
 import androidx.core.app.NavUtils;
+import androidx.loader.app.LoaderManager;
+import androidx.loader.content.Loader;
 
 import com.bumptech.glide.Glide;
+import com.google.android.gms.location.FusedLocationProviderClient;
+import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.saoussen.snapanonyme.R;
 import com.saoussen.snapanonyme.presentation.Infrastructure.Network.AppUtils;
+import com.saoussen.snapanonyme.presentation.loader.PostSnapsLoader;
+
+import java.io.File;
+
+import static com.saoussen.snapanonyme.presentation.Infrastructure.Network.AppUtils.PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION;
 
 /**
  * An example full-screen activity that shows and hides the system UI (i.e.
  * status bar and navigation/system bar) with user interaction.
  */
-public class PublisherActivity extends AppCompatActivity {
+public class PublisherActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks {
     /**
      * Whether or not the system UI should be auto-hidden after
      * {@link #AUTO_HIDE_DELAY_MILLIS} milliseconds.
      */
     private static final boolean AUTO_HIDE = true;
-
+    private FusedLocationProviderClient mFusedLocationClient;
+    private File  mCurrentPhoto;
     /**
      * If {@link #AUTO_HIDE} is set, the number of milliseconds to wait after
      * user interaction before hiding the system UI.
@@ -93,6 +110,8 @@ public class PublisherActivity extends AppCompatActivity {
             return false;
         }
     };
+    private Location mCurrentLocation;
+    private LoaderManager.LoaderCallbacks<? extends Object> mContext;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -108,10 +127,17 @@ public class PublisherActivity extends AppCompatActivity {
         mControlsView = findViewById(R.id.fullscreen_content_controls);
         mContentView = findViewById(R.id.fullscreen_content);
 
+        mFusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
+
+        mContext = this;
+
         Intent publisherIntent = getIntent();
         if (publisherIntent != null) {
             String currentPhotoPath = publisherIntent.getStringExtra(AppUtils.IMAGE_PATH_EXTRA);
-            if (currentPhotoPath != null)
+
+           mCurrentPhoto = (File) publisherIntent.getSerializableExtra(AppUtils.IMAGE_EXTRA);
+
+            if (mCurrentPhoto != null)
                 Glide.with(this).load(currentPhotoPath).into(mContentView);
         }
 
@@ -196,11 +222,76 @@ public class PublisherActivity extends AppCompatActivity {
     }
 
     public void onPublish(View view) {
+
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            String[] permissions = {Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION};
+            if (!AppUtils.hasPermissions(this, permissions)) {
+
+                // Permission is not granted
+                // Should we show an explanation?
+                if (ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.ACCESS_FINE_LOCATION)) {
+                    // Show an explanation to the user *asynchronously* -- don't block
+                    // this thread waiting for the user's response! After the user
+                    // sees the explanation, try again to request the permission.
+                } else {
+                    AppUtils.requestPermissions(this, permissions, PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION);
+                    // No explanation needed; request the permission
+                }
+            } else {
+                //Permission already granted , get the current location and loadSnaps
+                publishSnap();
+            }
+        }
+
+
     }
+
+
+    @SuppressLint("MissingPermission")
+    private void publishSnap() {
+
+        mFusedLocationClient.getLastLocation()
+                .addOnSuccessListener(this, new OnSuccessListener<Location>() {
+                    @Override
+                    public void onSuccess(Location result) {
+                        // Got last known location. In some rare situations this can be null.
+                        if (result != null) {
+                            // Logic to handle location object
+                            mCurrentLocation = result;
+                            Bundle bundle = new Bundle();
+                            getSupportLoaderManager().restartLoader(0, null, mContext);
+                        }
+                    }
+                });
+
+    }
+
 
     public void onCancelPublish(View view) {
 
+        goToMainActivity();
+    }
+
+    private void goToMainActivity() {
         Intent intent = new Intent(this, MainActivity.class);
         startActivity(intent);
+    }
+
+    @NonNull
+    @Override
+    public Loader onCreateLoader(int id, @Nullable Bundle args) {
+        return new PostSnapsLoader(this, mCurrentLocation, mCurrentPhoto);
+    }
+
+    @Override
+    public void onLoadFinished(@NonNull Loader loader, Object data) {
+
+        goToMainActivity();
+    }
+
+    @Override
+    public void onLoaderReset(@NonNull Loader loader) {
+
     }
 }

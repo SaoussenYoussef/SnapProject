@@ -47,24 +47,16 @@ public class NetworkUtils {
     // Parameter for distance.
     private static final String DISTANCE = "distance";
 
-    private  static final String PICTURE_PARAM = "picture";// ça doit être égal à picture pour que le BakEND puisse la reconnaître
-
-    private final ConnectivityManager mConnectivityManager;
-
-    private Context mContext;
-    private NetworkInfo networkInfo;
-
+    private static final String PICTURE_PARAM = "picture";// ça doit être égal à picture pour que le BakEND puisse la reconnaître
 
 
     // Récuperer les données du réseau
 
 
-    public NetworkUtils(Context context) {
-        this.mContext = context;
-        mConnectivityManager = (ConnectivityManager)
-                mContext.getSystemService(Context.CONNECTIVITY_SERVICE);
-    }
+    public NetworkUtils() {
 
+
+    }
 
 
     public static List<Snap> getSnaps(Location location, Double scope) {
@@ -119,7 +111,7 @@ public class NetworkUtils {
             multipart.addFormField(LONGITUDE, String.valueOf(location.getLongitude()));
             multipart.addFormField(LATITUDE, String.valueOf(location.getLatitude()));
             multipart.addFilePart(PICTURE_PARAM, file);
-           // multipart.addHeaderField(CONTENT_TYPE, "multipart/form-data");
+            // multipart.addHeaderField(CONTENT_TYPE, "multipart/form-data");
             multipart.finish();
 
         } catch (IOException e) {
@@ -193,7 +185,6 @@ public class NetworkUtils {
          */
 
         // rajoute un élément de type Fichier
-
         public void addFilePart(String fieldName, File uploadFile)
                 throws IOException {
             String fileName = uploadFile.getName();
@@ -265,8 +256,6 @@ public class NetworkUtils {
             return response;
         }
     }
-
-
 
 
 }

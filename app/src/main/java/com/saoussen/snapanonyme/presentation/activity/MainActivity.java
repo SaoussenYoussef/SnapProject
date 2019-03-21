@@ -26,6 +26,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.FileProvider;
 
+import static com.saoussen.snapanonyme.presentation.Infrastructure.Network.AppUtils.IMAGE_EXTRA;
 import static com.saoussen.snapanonyme.presentation.Infrastructure.Network.AppUtils.IMAGE_PATH_EXTRA;
 import static com.saoussen.snapanonyme.presentation.Infrastructure.Network.AppUtils.PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION;
 
@@ -35,6 +36,7 @@ public class MainActivity extends AppCompatActivity {
 
     private static final int PERMISSION_REQUEST_ACCESS_EXTERNAL_STORAGE = 123 ;
     String mcurrentPhotoPath;
+    private File mCurrentPhoto;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -105,7 +107,7 @@ public class MainActivity extends AppCompatActivity {
 
 
             Intent intent = new Intent(this, PublisherActivity.class);
-            intent.putExtra(IMAGE_PATH_EXTRA, mcurrentPhotoPath);
+            intent.putExtra(IMAGE_EXTRA, mCurrentPhoto);
             startActivity(intent);
         }
     }
@@ -125,6 +127,7 @@ public class MainActivity extends AppCompatActivity {
         );
 
         // Save a file: path for use with ACTION_VIEW intents
+        mCurrentPhoto = image;
         mcurrentPhotoPath = image.getAbsolutePath();
         return image;
     }
