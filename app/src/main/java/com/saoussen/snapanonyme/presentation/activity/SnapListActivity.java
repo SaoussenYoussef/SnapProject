@@ -19,7 +19,7 @@ import com.google.android.material.snackbar.Snackbar;
 import com.saoussen.snapanonyme.R;
 import com.saoussen.snapanonyme.presentation.Infrastructure.Network.AppUtils;
 import com.saoussen.snapanonyme.presentation.adapter.SnapsAdapter;
-import com.saoussen.snapanonyme.presentation.loader.SnapLoader;
+import com.saoussen.snapanonyme.presentation.loader.GetSnapsLoader;
 import com.saoussen.snapanonyme.presentation.model.Snap;
 
 import java.util.ArrayList;
@@ -149,7 +149,7 @@ public class SnapListActivity extends AppCompatActivity implements LoaderManager
     public Loader<List<Snap>> onCreateLoader(int id, @Nullable Bundle args) {
 
 
-        return new SnapLoader(this, mCurrentLocation, mScope);
+        return new GetSnapsLoader(this, mCurrentLocation, mScope);
     }
 
 

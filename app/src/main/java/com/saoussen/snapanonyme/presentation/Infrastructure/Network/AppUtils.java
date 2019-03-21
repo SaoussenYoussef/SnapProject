@@ -14,6 +14,7 @@ import androidx.core.app.ActivityCompat;
 public class AppUtils {
 
     public static final int PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION =123;
+    public static final String IMAGE_PATH_EXTRA = "IMAGE_PATH_EXTRA";
 
     @RequiresApi(api = Build.VERSION_CODES.M)
     public static boolean hasPermissions(Context context, String[] permissions) {

@@ -12,4 +12,12 @@
     <string name="snap_image_content_description">snap_image</string>
     <string name="snap_action_comment_info_sample">35k</string>
     <string name="m_away" />
+
+    <string name="title_activity_publisher">PublisherActivity</string>
+    <string name="dummy_button">Dummy Button</string>
+    <string name="dummy_content">DUMMY\nCONTENT</string>
+
+    <string name="title_activity_fullscreen">FullscreenActivity</string>
+    <string name="button_cancel">cancel</string>
+    <string name="button_publish">ok</string>
 </resources>

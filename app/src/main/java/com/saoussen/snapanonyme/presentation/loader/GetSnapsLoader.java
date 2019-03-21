@@ -18,14 +18,14 @@ import androidx.annotation.RequiresApi;
 import androidx.loader.content.AsyncTaskLoader;
 
 
-public class SnapLoader extends AsyncTaskLoader<List<Snap>> {
+public class GetSnapsLoader extends AsyncTaskLoader<List<Snap>> {
 
 
     Location mCurrentLocation;
     Double mScope;
 
 
-    public SnapLoader(@NonNull Context context, Location mCurrentLocation, double mScope) {
+    public GetSnapsLoader(@NonNull Context context, Location mCurrentLocation, double mScope) {
         super(context);
 
 
